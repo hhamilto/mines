@@ -4,7 +4,7 @@
 <div id="field" ng-controller="GamePlay">
     field {{tprop}}
     <div class="row" ng-repeat="row in board">
-        <div class="tile" ng-class="{swept:tile.swept}" ng-repeat="tile in row" ng-style="{width:(100/row.length)+'%', height:(100/board.length)+'%'}" ng-right-click="alert('yo')" ng-click="tile.sweep()" >
+        <div class="tile" ng-class="{swept:tile.swept}" ng-repeat="tile in row" ng-style="{width:(100/row.length)+'%', height:(100/board.length)+'%'}" ng-right-click="alert('yo')"  >
             imma tile. {{tile.mined?"[ ]":"[ ]"}}<br/>
             swept?{{tile.swept?"y":"n"}}<br/>
             touching={{tile.swept?tile.touching:''}}

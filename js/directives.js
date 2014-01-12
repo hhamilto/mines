@@ -9,7 +9,7 @@ angular.module('myApp.directives', []).
       elm.text(version);
     };
   }]).
-  directive('ngRightClick', ['$parse',function($parse) {
+  directive('ngRightClick', ['$parse', function($parse) {
     return function(scope, element, attrs) {
         var fn = $parse(attrs.ngRightClick);
         element.bind('contextmenu', function(event) {
@@ -19,4 +19,4 @@ angular.module('myApp.directives', []).
             });
         });
     };
- }]);;
+ }]);
