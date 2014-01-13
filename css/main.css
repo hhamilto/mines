@@ -297,12 +297,8 @@ textarea {
     box-sizing: border-box;
 }
 
-.flag:before{
-    content:"X";
+.flagged{
     background:red;
-    margin:50%;
-    width:40px;
-    height:40px;
 }
 
 .swept{

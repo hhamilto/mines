@@ -4,21 +4,9 @@
 
 angular.module('myApp.controllers', []).
   controller('GamePlay', ['$scope',function($scope) {
-    $scope.tprop = "this is the test property";
-    var neighbors = function(x,y){
-        return [[x-1,y  ],
-                 [x-1,y-1],
-                 [x  ,y-1],
-                 [x+1,y-1],
-                 [x+1,y  ],
-                 [x+1,y+1],
-                 [x  ,y+1],
-                 [x-1,y+1]].filter(function(coord){
-                    return coord[0]>=0 && coord[0] < $scope.board[0].length &&
-                        coord[1]>=0 && coord[1] < $scope.board.length;
-                });
+    function won(){
+        return $scope.board.reduce(function(p,c){return p && c.reduce(function(p,c){return p && (c.mined?true:c.swept);}, true);}, true);
     }
-
     $scope.board = [];
     for(var i = 0; i < 8; i++){
         var row = []
@@ -29,16 +17,33 @@ angular.module('myApp.controllers', []).
                 touching: 0,
                 x:j,
                 y:i,
+                neighbors: function(){
+                    return [[this.x-1,this.y  ],
+                            [this.x-1,this.y-1],
+                            [this.x  ,this.y-1],
+                            [this.x+1,this.y-1],
+                            [this.x+1,this.y  ],
+                            [this.x+1,this.y+1],
+                            [this.x  ,this.y+1],
+                            [this.x-1,this.y+1]].filter(function(coord){
+                                return coord[0]>=0 && coord[0] < $scope.board[0].length &&
+                                    coord[1]>=0 && coord[1] < $scope.board.length;
+                            }).map(function(coord){
+                                return $scope.board[coord[1]][coord[0]];
+                            });
+                },
                 sweep: function(){
-                    if(this.swept) return;
+                    if(this.flagged || this.swept) return;
                     if(this.mined){ alert("you suck, you're dead, and I hate you.");return;}
                     this.swept = true;
                     if(this.touching == 0){
-                        //alert('sweepin the neighbors')
-                        neighbors(this.x,this.y).map(function(coord){
-                            //alert("zweeping "+coord[0]+", "+coord[1]);
-                            $scope.board[coord[1]][coord[0]].sweep();
-                        });
+                        this.neighbors().map(function(e){e.sweep()});
+                    }
+                    if(won()) alert("ya won");
+                },
+                resweep: function(){
+                    if(this.touching == this.neighbors().filter(function(tile){return tile.flagged}).length){
+                        this.neighbors().map(function(e){e.sweep()});
                     }
                 }
             });
@@ -50,8 +55,8 @@ angular.module('myApp.controllers', []).
         row.map(function(tile,x,row){
             if(Math.random()<.19){
                 tile.mined = true;
-                neighbors(x,y).map(function(coord){
-                    board[coord[1]][coord[0]].touching++;
+                tile.neighbors().map(function(neighbor){
+                    neighbor.touching++;
                 });
             }
         });
