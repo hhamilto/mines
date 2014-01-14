@@ -2,7 +2,7 @@
     controls
 </div>
 <div id="field" ng-controller="GamePlay">
-    <div id="fieldContainer"h>
+    <div id="fieldContainer">
         <div class="row" ng-repeat="row in board">
             <div class="tile" ng-class="{swept:tile.swept, flagged: tile.flagged}" ng-repeat="tile in row" ng-style="{width:(100/row.length)+'%', height: (800/board.length)+'px'}" ng-right-click="tile.flagged = !tile.flagged" ng-click="tile.swept?tile.resweep():tile.sweep()" >
                 {{tile.swept && tile.touching > 0?tile.touching:''}}
